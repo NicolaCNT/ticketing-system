@@ -6,6 +6,22 @@
 
 import './bootstrap';
 import { createApp } from 'vue';
+import { provideApolloClient } from '@vue/apollo-composable';
+import { createApolloProvider } from '@vue/apollo-option';
+import { ApolloClient, InMemoryCache } from '@apollo/client/core'
+
+const cache = new InMemoryCache();
+
+const apolloClient = new ApolloClient({
+    cache,
+    uri: 'http://127.0.0.1:8000/'
+});
+
+const apolloProvider = createApolloProvider({
+    defaultClient: apolloClient,
+});
+
+provideApolloClient(apolloClient);
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -36,4 +52,4 @@ app.component('example-component', ExampleComponent);
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 
-app.mount('#app');
+app.use(apolloProvider).mount('#app');
